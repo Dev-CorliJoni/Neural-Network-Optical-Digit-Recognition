@@ -9,15 +9,19 @@ class ConfigurationCollection:
     def __init__(self):
         self._ai_configs = []
 
-    def __init__(self, file_path_list: list):
-        self.__init__()
-        self.name = get_combined_file_names(file_path_list)
-        self.name_readable = get_combined_file_names_readable(file_path_list)
+    @staticmethod
+    def create_by_list(file_path_list: list):
+        cc = ConfigurationCollection()
+        cc.name = get_combined_file_names(file_path_list)
+        cc.name_readable = get_combined_file_names_readable(file_path_list)
+        return cc
 
-    def __init__(self, file_name: str):
-        self.__init__()
-        self.name = file_name.split('.')[0]
-        self.name_readable = self.name.replace('-', ' - ')
+    @staticmethod
+    def create_by_str(file_name: str):
+        cc = ConfigurationCollection()
+        cc.name = file_name.split('.')[0]
+        cc.name_readable = cc.name.replace('-', ' - ')
+        return cc
 
     def append(self, config: Configuration):
         self._ai_configs.append(config)

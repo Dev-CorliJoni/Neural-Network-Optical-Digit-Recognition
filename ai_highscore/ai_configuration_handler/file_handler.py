@@ -24,11 +24,11 @@ class FileHandler:
 
     @staticmethod
     def _load_config(path, name):
-        config_collection = ConfigurationCollection(str(name))
+        config_collection = ConfigurationCollection.create_by_str(str(name))
 
         with open(path, 'r') as file:
             for line in file:
-                config = Configuration.create(line[0:-1].split(';;'))
+                config = Configuration.create_from_text(line[0:-1].split(';;')) # Test if [0:-1] or [0:]
                 config_collection.append(config)
 
         return config_collection.sort()

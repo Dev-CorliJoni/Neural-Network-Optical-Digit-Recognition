@@ -21,7 +21,12 @@ class Configuration:
                f"{self.learning_rate};;{self.train_epochs};;{bytes_wih};;{bytes_who}\n "
 
     @staticmethod
-    def create(data):
+    def create_from_neural_network(accuracy, train_epochs, nn):
+        i_nodes, h_nodes, o_nodes, learning_rate, weights_ih, weights_ho = nn.get_configuration_data()  # not written function
+        return Configuration(i_nodes, h_nodes, o_nodes, learning_rate, train_epochs, weights_ih, weights_ho, accuracy)
+
+    @staticmethod
+    def create_from_text(data):
         input_nodes, hidden_nodes, output_nodes, learning_rate, train_epochs, wih, who, accuracy = \
             Configuration._cast_data(data)
 

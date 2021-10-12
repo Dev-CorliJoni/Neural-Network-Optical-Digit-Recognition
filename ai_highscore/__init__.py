@@ -1,1 +1,3 @@
-from .models import Configuration
+import ai_highscore.ai_configuration_handler
+import ai_highscore.custom_exceptions
+import ai_highscore.models

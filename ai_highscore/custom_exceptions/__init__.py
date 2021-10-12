@@ -1,2 +1,2 @@
-from .configuiration_collection_merge_error import ConfigurationCollectionMergeErrorType, \
-    ConfigurationCollectionMergeError
+from ai_highscore.custom_exceptions.configuiration_collection_merge_error import ConfigurationCollectionMergeError, \
+    ConfigurationCollectionMergeErrorType
