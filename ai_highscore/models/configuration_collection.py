@@ -9,6 +9,7 @@ class ConfigurationCollection:
     def __init__(self):
         self._ai_configs = []
 
+    # ConfigurationCollections shouldn't have - in their names
     @staticmethod
     def create_by_list(file_path_list: list):
         cc = ConfigurationCollection()

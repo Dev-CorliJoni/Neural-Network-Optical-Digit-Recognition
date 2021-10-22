@@ -1,4 +1,5 @@
-from ai_highscore.custom_exceptions.configuiration_collection_merge_error import ConfigurationCollectionMergeErrorType
+from ai_highscore.custom_exceptions.configuiration_collection_merge_error import ConfigurationCollectionMergeErrorType,\
+    get_message
 
 
 class ConfigurationCollectionMergeError(Exception):
@@ -11,6 +12,6 @@ class ConfigurationCollectionMergeError(Exception):
     @staticmethod
     def _get_message(type_: ConfigurationCollectionMergeErrorType, message):
         if message is None:
-            return ConfigurationCollectionMergeErrorType.get_message(type_.value)
+            return get_message(type_.value)
         else:
             return message
