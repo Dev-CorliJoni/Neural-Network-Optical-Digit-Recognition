@@ -1,6 +1,7 @@
 from ai_highscore.custom_exceptions.configuiration_collection_merge_error import ConfigurationCollectionMergeErrorType,\
     get_message
-
+# Try from . import ConfigurationCollectionMergeErrorType, get_message
+# not until its finished
 
 class ConfigurationCollectionMergeError(Exception):
 
