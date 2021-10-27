@@ -15,26 +15,30 @@ class NeuralNetworkEvaluator:
         self.input_nodes, self.output_nodes = (784, 10)
 
     def train_and_query(self, train_paths, test_paths, hidden_nodes, learning_rate, train_epochs, test_epochs,
-                        save_ai_conf=True):
-        print(f"start train and query | Config - Hidden Nodes: {hidden_nodes} | Learning Rate: {learning_rate} | "
-              f"Train Epochs: {train_epochs} | Test Epochs: {test_epochs} ")
-
+                        save_config=True):
         self.scoreboard = Scoreboard()
         configuration_handler = ConfigurationHandler(test_paths)
 
+        NeuralNetworkEvaluator.print_lap_start(hidden_nodes, learning_rate, train_epochs, test_epochs)
+
         for _ in range(test_epochs):
-            self.nn = NeuralNetwork(self.input_nodes, hidden_nodes, self.output_nodes, learning_rate)
-            self.execute_action_with_input(train_paths, self.train_network, train_epochs)
-            self.execute_action_with_input(test_paths, self.query_network)
-            accuracy = self.scoreboard.finish_query_lap()
-            if save_ai_conf:
-                config = Configuration.create_from_neural_network(accuracy, train_epochs, self.nn)
-                configuration_handler.append_config(config)
+            self.test_lap(train_paths, test_paths, hidden_nodes, learning_rate, train_epochs)
+            self.process_lap_response(train_epochs, configuration_handler, save_config)
 
-        print(f"Config - Hidden Nodes: {hidden_nodes} | Learning Rate: {learning_rate} | Train Epochs: {train_epochs} |"
-              f" Average accuracy:{self.scoreboard.get_laps_average_accuracy()}\n\n")
+        laps_average_accuracy = self.scoreboard.get_laps_average_accuracy()
+        NeuralNetworkEvaluator.print_lap_end(hidden_nodes, learning_rate, train_epochs, laps_average_accuracy)
 
-    def execute_action_with_input(self, filepaths, action, epochs=1):
+    def test_lap(self, train_paths, test_paths, hidden_nodes, learning_rate, train_epochs):
+        self.nn = NeuralNetwork(self.input_nodes, hidden_nodes, self.output_nodes, learning_rate)
+        NeuralNetworkEvaluator.execute_action(train_paths, self.train_network, train_epochs)
+        NeuralNetworkEvaluator.execute_action(test_paths, self.query_network)
+
+    def process_lap_response(self, train_epochs, config_handler, save_config):
+        accuracy = self.scoreboard.finish_query_lap()
+        NeuralNetworkEvaluator.add_config(config_handler, accuracy, train_epochs, self.nn, save_config)
+
+    @staticmethod
+    def execute_action(filepaths, action, epochs=1):
         for _ in range(epochs):
             for filepath in filepaths:
                 with open(filepath, 'r') as file:
@@ -59,3 +63,19 @@ class NeuralNetworkEvaluator:
             self.scoreboard.successful_query()
         else:
             self.scoreboard.unsuccessful_query()
+
+    @staticmethod
+    def add_config(configuration_handler, accuracy, train_epochs, neural_network, save_config):
+        if save_config:
+            config = Configuration.create_from_neural_network(accuracy, train_epochs, neural_network)
+            configuration_handler.append_config(config)
+
+    @staticmethod
+    def print_lap_start(hidden_nodes, learning_rate, train_epochs, test_epochs):
+        print(f"start train and query | Config - Hidden Nodes: {hidden_nodes} | Learning Rate: {learning_rate} | "
+              f"Train Epochs: {train_epochs} | Test Epochs: {test_epochs} ")
+
+    @staticmethod
+    def print_lap_end(hidden_nodes, learning_rate, train_epochs, laps_average_accuracy):
+        print(f"Config - Hidden Nodes: {hidden_nodes} | Learning Rate: {learning_rate} | Train Epochs: {train_epochs} |"
+              f" Average accuracy:{laps_average_accuracy}\n\n")

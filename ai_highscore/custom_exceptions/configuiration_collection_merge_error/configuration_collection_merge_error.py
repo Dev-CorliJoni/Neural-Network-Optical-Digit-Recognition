@@ -3,6 +3,7 @@ from ai_highscore.custom_exceptions.configuiration_collection_merge_error import
 # Try from . import ConfigurationCollectionMergeErrorType, get_message
 # not until its finished
 
+
 class ConfigurationCollectionMergeError(Exception):
 
     def __init__(self, type_: ConfigurationCollectionMergeErrorType, message: str = None):
