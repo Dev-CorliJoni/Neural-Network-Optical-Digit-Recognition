@@ -14,23 +14,26 @@ class NeuralNetworkEvaluator:
         self.scoreboard = None
         self.input_nodes, self.output_nodes = (784, 10)
 
-    def train_and_query(self, train_paths, test_paths, hidden_nodes, learning_rate, train_epochs, test_epochs,
-                        save_config=True):
+    def train_and_query(self, train_paths, fine_train_paths, test_paths, hidden_nodes, learning_rate,
+                        train_epochs, fine_train_epochs, test_epochs, save_config=True):
         self.scoreboard = Scoreboard()
         configuration_handler = ConfigurationHandler(test_paths)
 
         NeuralNetworkEvaluator.print_lap_start(hidden_nodes, learning_rate, train_epochs, test_epochs)
 
         for _ in range(test_epochs):
-            self.test_lap(train_paths, test_paths, hidden_nodes, learning_rate, train_epochs)
+            self.test_lap(train_paths, fine_train_paths, test_paths, hidden_nodes, learning_rate,
+                          train_epochs, fine_train_epochs)
             self.process_lap_response(train_epochs, configuration_handler, save_config)
 
         laps_average_accuracy = self.scoreboard.get_laps_average_accuracy()
         NeuralNetworkEvaluator.print_lap_end(hidden_nodes, learning_rate, train_epochs, laps_average_accuracy)
 
-    def test_lap(self, train_paths, test_paths, hidden_nodes, learning_rate, train_epochs):
+    def test_lap(self, train_paths, fine_train_paths, test_paths, hidden_nodes, learning_rate,
+                 train_epochs, fine_train_epochs):
         self.nn = NeuralNetwork(self.input_nodes, hidden_nodes, self.output_nodes, learning_rate)
         NeuralNetworkEvaluator.execute_action(train_paths, self.train_network, train_epochs)
+        NeuralNetworkEvaluator.execute_action(fine_train_paths, self.train_network, fine_train_epochs)
         NeuralNetworkEvaluator.execute_action(test_paths, self.query_network)
 
     def process_lap_response(self, train_epochs, config_handler, save_config):

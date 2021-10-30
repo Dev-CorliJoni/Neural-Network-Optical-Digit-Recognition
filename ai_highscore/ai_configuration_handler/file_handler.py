@@ -28,8 +28,9 @@ class FileHandler:
 
         with open(path, 'r') as file:
             for line in file:
-                config = Configuration.create_from_text(line[0:-1].split(';;')) # Test if [0:-1] or [0:]
-                config_collection.append(config)
+                if line != "":
+                    config = Configuration.create_from_text(line[:-1].split(';;;'))  # line[:-1] to remove \n
+                    config_collection.append(config)
 
         return config_collection.sort()
 
@@ -37,7 +38,7 @@ class FileHandler:
     def save_configs(config_dir, config_collections):
         for config_collection in config_collections:
             name, _, configs = config_collection.resolve()
-            path_to_file = os.path.join(config_dir, name)
+            path_to_file = os.path.join(config_dir, f"{name}.txt")
             FileHandler._save_config(path_to_file, configs)
 
     @staticmethod

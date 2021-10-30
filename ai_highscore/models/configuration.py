@@ -15,14 +15,14 @@ class Configuration:
         self.accuracy = accuracy
 
     def to_csv_one_line(self):
-        bytes_wih = str(self.wih.tobytes())[2:-1]
-        bytes_who = str(self.who.tobytes())[2:-1]
-        return f"{self.accuracy};;{';;'.join([str(neuron_node) for neuron_node in self.neuron_nodes])};;" \
-               f"{self.learning_rate};;{self.train_epochs};;{bytes_wih};;{bytes_who}\n "
+        bytes_wih = str(self.wih.tobytes())[2:-1]  # [2:-1] to remove b'' inside the string
+        bytes_who = str(self.who.tobytes())[2:-1]  # [2:-1] to remove b'' inside the string
+        return f"{self.accuracy};;;{';;;'.join([str(neuron_node) for neuron_node in self.neuron_nodes])};;;" \
+               f"{self.learning_rate};;;{self.train_epochs};;;{bytes_wih};;;{bytes_who}\n"
 
     @staticmethod
     def create_from_neural_network(accuracy, train_epochs, nn):
-        i_nodes, h_nodes, o_nodes, learning_rate, weights_ih, weights_ho = nn.get_configuration_data()  # not written function
+        i_nodes, h_nodes, o_nodes, learning_rate, weights_ih, weights_ho = nn.get_configuration_data()  # not written function !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         return Configuration(i_nodes, h_nodes, o_nodes, learning_rate, train_epochs, weights_ih, weights_ho, accuracy)
 
     @staticmethod
@@ -36,7 +36,7 @@ class Configuration:
 
     @staticmethod
     def _cast_data(data):
-        input_nodes, hidden_nodes, output_nodes, learning_rate, train_epochs, wih, who, accuracy = data
+        accuracy, input_nodes, hidden_nodes, output_nodes, learning_rate, train_epochs, wih, who,  = data
 
         return (int(input_nodes), int(hidden_nodes), int(output_nodes), float(learning_rate), int(train_epochs),
                 bytes(wih.encode().decode('unicode_escape'), encoding="raw_unicode_escape"),

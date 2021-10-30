@@ -23,7 +23,7 @@ def _are_combined_names_same(combined_names_as_str_1: str, combined_names_as_str
 
 
 def _are_name_list_elements_in_combined_names_str(combined_names_str: str, name_list: list):
-    if not combined_names_str and not name_list:
+    if not combined_names_str and not name_list:  # if both are empty
         return False
 
     for filename in name_list:

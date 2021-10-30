@@ -1,6 +1,4 @@
 from .scoreboard import Scoreboard
 from .neural_network_evaluator import NeuralNetworkEvaluator
-from .neural_network_evaluator_predefinitions import train_and_query_big, train_and_query_big_once, \
-    train_and_query_small, train_and_query_small_once
-from .neural_network_tester import run_test_parallel
-
+from .neural_network_tester_methods import run_tests_multithreading, run_tests_multiprocessing
+from .neural_network_tester_predefinition import run_tests_small, run_tests_big
