@@ -43,6 +43,7 @@ def _run_test():
         ["iukasdfghuoa/saödlofj/lkdsjfk/file_7.txt", "lkdsjfk/file_1.txt", "saödlofj/lkdsjfk/file_1.txt"],
         ["iukasdfghuoa/saödlofj/lkdsjfk/file_1.txt", "lkdsjfk/file_1.txt", "saödlofj/lkdsjfk/file_1.txt"]
     ]]
+    print("worked")
 
 
 def add_bullshit(paths: list):
