@@ -48,6 +48,12 @@ class ConfigurationCollection:
         self._ai_configs = sorted(self._ai_configs, key=lambda c: c.accuracy, reverse=True)
         return self
 
+    def get_best(self, amount):
+        self.sort()
+        if len(self._ai_configs) > amount:
+            self._ai_configs = self._ai_configs[:amount]
+        return self
+
     def resolve(self):
         self._ai_configs = sorted(self._ai_configs, key=lambda c: c.accuracy, reverse=True)
         return self.name, self.name_readable, self._ai_configs

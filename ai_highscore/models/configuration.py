@@ -22,7 +22,7 @@ class Configuration:
 
     @staticmethod
     def create_from_neural_network(accuracy, train_epochs, nn):
-        i_nodes, h_nodes, o_nodes, learning_rate, weights_ih, weights_ho = nn.get_configuration_data()  # not written function !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        i_nodes, h_nodes, o_nodes, learning_rate, weights_ih, weights_ho = nn.get_configuration_data()
         return Configuration(i_nodes, h_nodes, o_nodes, learning_rate, train_epochs, weights_ih, weights_ho, accuracy)
 
     @staticmethod

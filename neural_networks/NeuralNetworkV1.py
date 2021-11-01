@@ -98,3 +98,7 @@ class NeuralNetwork:
     def __str__(self):
         return f"|Neural Network -> Input Nodes: {self._input_nodes} - Hidden Nodes: {self._hidden_nodes} - Output " \
                f"Nodes: {self._output_nodes} - Learning Rate: {self._learning_rate}| "
+
+    def get_configuration_data(self):
+        return (self._input_nodes, self._hidden_nodes, self._output_nodes, self._learning_rate,
+                self._weights_input_hidden, self._weights_hidden_output)

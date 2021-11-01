@@ -1,34 +1,35 @@
+from ai_highscore.ai_configuration_handler import ConfigurationHandlerGlobal
 from neural_network_helper import NeuralNetworkEvaluator
-from concurrent.futures import ProcessPoolExecutor
-from threading import Thread
+from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
+
+
+def _run_tests(executor_class, test_epochs, training_configurations, test_paths, train_paths, fine_train_paths=[]):
+    params_list = [(args, test_epochs, test_paths, train_paths, fine_train_paths) for args in training_configurations]
+
+    with executor_class() as executor:
+        results = executor.map(_run_test, params_list)
+
+    for result in results:
+        if isinstance(result, Exception):
+            print(result)
+        else:
+            ConfigurationHandlerGlobal.finish_handler(result)
+
+
+def _run_test(params):
+    args, test_epochs, test_paths, train_paths, fine_train_paths = params
+    hidden_nodes, learning_rate, train_epochs, fine_train_epochs = args.values()
+    configuration_handler = NeuralNetworkEvaluator().train_and_query(train_paths, fine_train_paths, test_paths,
+                                                                     hidden_nodes, learning_rate,
+                                                                     train_epochs, fine_train_epochs, test_epochs)
+    return configuration_handler
 
 
 # Multiprocessing
 def run_tests_multiprocessing(test_epochs, training_configurations, test_paths, train_paths, fine_train_paths=[]):
-    def partial_run_test_multiprocessing(args):
-        _run_test_multiprocessing(test_epochs, args, test_paths, train_paths, fine_train_paths)
-
-    with ProcessPoolExecutor() as executor:
-        x = executor.map(partial_run_test_multiprocessing, training_configurations)
-
-
-def _run_test_multiprocessing(test_epochs, args, test_paths, train_paths, fine_train_paths):
-    hidden_nodes, learning_rate, train_epochs, fine_train_epochs = args.values()
-    NeuralNetworkEvaluator().train_and_query(train_paths, fine_train_paths, test_paths, hidden_nodes, learning_rate,
-                                             train_epochs, fine_train_epochs, test_epochs)
+    _run_tests(ProcessPoolExecutor, test_epochs, training_configurations, test_paths, train_paths, fine_train_paths)
 
 
 # Multithreading
 def run_tests_multithreading(test_epochs, training_configurations, test_paths, train_paths, fine_train_paths=[]):
-    threads = [_run_test_multithreading(test_epochs, args, test_paths, train_paths, fine_train_paths)
-               for args in training_configurations]
-    [thread.join() for thread in threads]
-
-
-def _run_test_multithreading(test_epochs, args, test_paths, train_paths, fine_train_paths):
-    hidden_nodes, learning_rate, train_epochs, fine_train_epochs = args.values()
-    params = (train_paths, fine_train_paths, test_paths, hidden_nodes, learning_rate,
-              train_epochs, fine_train_epochs, test_epochs)
-    t = Thread(target=NeuralNetworkEvaluator().train_and_query_big, args=params)
-    t.start()
-    return t
+    _run_tests(ThreadPoolExecutor, test_epochs, training_configurations, test_paths, train_paths, fine_train_paths)

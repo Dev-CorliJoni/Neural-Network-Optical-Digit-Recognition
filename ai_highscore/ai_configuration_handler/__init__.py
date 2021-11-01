@@ -1,3 +1,4 @@
 from .file_handler import FileHandler
 from .merger import merge
-from .configuration_handler import ConfigurationHandler
+from .configuration_handler_global import ConfigurationHandlerGlobal
+from .configuration_handler_local import ConfigurationHandlerLocal

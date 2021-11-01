@@ -1,9 +1,10 @@
+import time
 import numpy
 
 from neural_network_helper import Scoreboard
 from neural_networks import NeuralNetwork
 
-from ai_highscore.ai_configuration_handler import ConfigurationHandler
+from ai_highscore.ai_configuration_handler import ConfigurationHandlerLocal
 from ai_highscore.models import Configuration
 
 
@@ -17,9 +18,10 @@ class NeuralNetworkEvaluator:
     def train_and_query(self, train_paths, fine_train_paths, test_paths, hidden_nodes, learning_rate,
                         train_epochs, fine_train_epochs, test_epochs, save_config=True):
         self.scoreboard = Scoreboard()
-        configuration_handler = ConfigurationHandler(test_paths)
+        configuration_handler = ConfigurationHandlerLocal(test_paths)
 
-        NeuralNetworkEvaluator.print_lap_start(hidden_nodes, learning_rate, train_epochs, test_epochs)
+        NeuralNetworkEvaluator.print_start(hidden_nodes, learning_rate, train_epochs, fine_train_epochs, test_epochs)
+        start = time.time()
 
         for _ in range(test_epochs):
             self.test_lap(train_paths, fine_train_paths, test_paths, hidden_nodes, learning_rate,
@@ -27,7 +29,8 @@ class NeuralNetworkEvaluator:
             self.process_lap_response(train_epochs, configuration_handler, save_config)
 
         laps_average_accuracy = self.scoreboard.get_laps_average_accuracy()
-        NeuralNetworkEvaluator.print_lap_end(hidden_nodes, learning_rate, train_epochs, laps_average_accuracy)
+        NeuralNetworkEvaluator.print_end(hidden_nodes, learning_rate, train_epochs, laps_average_accuracy, start)
+        return configuration_handler
 
     def test_lap(self, train_paths, fine_train_paths, test_paths, hidden_nodes, learning_rate,
                  train_epochs, fine_train_epochs):
@@ -74,11 +77,11 @@ class NeuralNetworkEvaluator:
             configuration_handler.append_config(config)
 
     @staticmethod
-    def print_lap_start(hidden_nodes, learning_rate, train_epochs, test_epochs):
+    def print_start(hidden_nodes, learning_rate, train_epochs, fine_train_epochs, test_epochs):
         print(f"start train and query | Config - Hidden Nodes: {hidden_nodes} | Learning Rate: {learning_rate} | "
-              f"Train Epochs: {train_epochs} | Test Epochs: {test_epochs} ")
+              f"Train Epochs: {train_epochs}| Fine-Train Epochs: {fine_train_epochs} | Test Epochs: {test_epochs}\n")
 
     @staticmethod
-    def print_lap_end(hidden_nodes, learning_rate, train_epochs, laps_average_accuracy):
+    def print_end(hidden_nodes, learning_rate, train_epochs, laps_average_accuracy, start_time):
         print(f"Config - Hidden Nodes: {hidden_nodes} | Learning Rate: {learning_rate} | Train Epochs: {train_epochs} |"
-              f" Average accuracy:{laps_average_accuracy}\n\n")
+              f" Average accuracy: {laps_average_accuracy}% | Test-execution time: {time.time() - start_time}s\n\n")
