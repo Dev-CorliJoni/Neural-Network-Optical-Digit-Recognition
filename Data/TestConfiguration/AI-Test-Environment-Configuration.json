@@ -1,0 +1,18 @@
+{
+  "max_configs": 10,
+
+  "used_test_config_path": "Data/TestConfiguration/TestConfigData-500-LLR-HTE.json",
+  "used_data_paths": {
+    "train": ["train_data_path_big"],
+    "fine_train": [],
+    "test": ["test_data_path_big"]
+  },
+
+  "data_paths": {
+    "test_data_path_small": "Data/TestData/mnist_test_10.csv",
+    "test_data_path_big": "Data/TestData/mnist_test.csv",
+    "train_data_path_small": "Data/TrainingsData/mnist_train_100.csv",
+    "train_data_path_big": "Data/TrainingsData/mnist_train.csv",
+    "own_data_path": "Data/TestData/my_train_data.csv"
+  }
+}

@@ -1,4 +1,5 @@
 @echo off
+Echo Test Execution started
 %cd%\venv\Scripts\python.exe %cd%\main.py >> %cd%\Data\ExecutionLogs\Log%random%.txt
 
 shutdown /s /t 300 /c "Shutdown will be executed in 300 seconds!"

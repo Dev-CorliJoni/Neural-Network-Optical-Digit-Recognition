@@ -1,7 +1,6 @@
-from neural_network_helper import run_tests_multithreading, run_tests_multiprocessing, run_tests_big, run_tests_small
+from neural_network_helper import run_tests_multithreading, run_tests_multiprocessing, run_tests
 from ai_highscore.ai_configuration_handler import ConfigurationHandlerGlobal
-from settings import get_train_data_path_big, get_test_data_path_big, get_own_test_data_path
-import json
+from test_configurations import get_train_data_path_big, get_test_data_path_big, get_own_test_data_path, TestConfigurations
 
 
 class Controller:
@@ -19,13 +18,12 @@ class Controller:
 
 def _initialize():
     ConfigurationHandlerGlobal.load_configs()
-    ConfigurationHandlerGlobal.set_max_configs(10)
 
 
 def _run():
-    with open('Data/TestConfiguration/TestConfigData-HighHNeurons+LowLR+HighTrainE.json') as f:
-        test_epochs, training_configurations = json.load(f).values()
-    run_tests_big(run_tests_multiprocessing, training_configurations, test_epochs)
+    configuration = TestConfigurations.load('Data/TestConfiguration/AI-Test-Environment-Configuration.json')
+    ConfigurationHandlerGlobal.set_max_configs(configuration.max_configs)
+    run_tests(run_tests_multiprocessing, configuration)
 
 
 def _test_one():

@@ -1,5 +1,5 @@
 from ai_highscore.ai_configuration_handler import FileHandler, merge
-from settings import get_configuration_folder
+from test_configurations import get_configuration_folder
 
 
 class ConfigurationHandlerGlobal:

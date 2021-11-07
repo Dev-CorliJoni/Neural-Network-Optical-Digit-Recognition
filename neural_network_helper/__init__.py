@@ -1,4 +1,3 @@
 from .scoreboard import Scoreboard
 from .neural_network_evaluator import NeuralNetworkEvaluator
-from .neural_network_tester_methods import run_tests_multithreading, run_tests_multiprocessing
-from .neural_network_tester_predefinition import run_tests_small, run_tests_big
+from .neural_network_tester_methods import run_tests_multithreading, run_tests_multiprocessing, run_tests
